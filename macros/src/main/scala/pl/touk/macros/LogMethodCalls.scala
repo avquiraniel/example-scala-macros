@@ -31,10 +31,10 @@ private[macros] object LogMethodCallsMacro {
         println(printlnStatement)
         q"""@scala.annotation.implicitNotFound("LogMethodCalls annotation needs implicit logger in scope")
             def $methodName(..$args): $retType = {
-              def logger$$()(implicit l: { def log(param: Any): Unit }) = l
-              logger$$().log("Calling method " + $methodNameString + "(" + $argNames + ")")
+              val logger$$ = implicitly[Logger]
+              logger$$.log("Calling method " + $methodNameString + "(" + $argNames + ")")
               val result = $body
-              logger$$().log("returning value " + result.toString)
+              logger$$.log("returning value " + result.toString)
               result
             }
         """
