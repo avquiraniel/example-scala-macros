@@ -11,28 +11,35 @@ class LogMethodCalls extends StaticAnnotation {
 }
 
 private[macros] object LogMethodCallsMacro {
+  import Util._
+
   def impl(c: whitebox.Context)(annottees: c.Tree*): c.Tree = {
+    val helpers = MacroHelpers[c.type](c)
     import c.universe._
     val enriched = annottees map {
-      case q"$mods def $methodName(..$args): $retType = $body " =>
-        println(methodName, args, retType, body)
-        def surroundWithQuotes(str: String) = "\"" + str + "\""
-        val emptyString = q""""""""
-        val argNames = if(args.nonEmpty)
-          args.map { case q"$_ val $argName: $_ = $_" =>
-            val argNameString = argName.toString
-            q"""$argNameString + "= " + $argName"""
+      case q"$mods def $methodName(...$argLists): $retType = $body " =>
+        println(methodName, argLists, retType, body)
 
-          }.reduce { (expr, next) => q"""$expr + ", " + $next"""}
-        else
-          emptyString
+        val argumentsLists = if(argLists.nonEmpty) {
+          argLists.map { args =>
+
+            val listString = if (args.nonEmpty)
+              args.map { case q"$_ val $argName: $_ = $_" =>
+                val argNameString = argName.toString
+                q"""$argNameString + "= " + $argName"""
+              }.reduce { (expr, next) => q"""$expr + ", " + $next""" }
+            else
+              helpers.emptyStringLiteral
+
+            q""""(" + $listString + ")""""
+          }.reduce { (lists, next) => q"""$lists + $next""" }
+        } else {
+          helpers.emptyStringLiteral
+        }
         val methodNameString = methodName.toString
-        val printlnStatement = "println(" + surroundWithQuotes(s"calling method $methodNameString(") + " + " + argNames + surroundWithQuotes(" + )") + ")"
-        println(printlnStatement)
-        q"""@scala.annotation.implicitNotFound("LogMethodCalls annotation needs implicit logger in scope")
-            def $methodName(..$args): $retType = {
+        q"""def $methodName(...$argLists): $retType = {
               val logger$$ = implicitly[Logger]
-              logger$$.log("Calling method " + $methodNameString + "(" + $argNames + ")")
+              logger$$.log("Calling method " + $methodNameString + $argumentsLists)
               val result = $body
               logger$$.log("returning value " + result.toString)
               result

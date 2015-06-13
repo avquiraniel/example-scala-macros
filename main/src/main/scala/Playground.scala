@@ -18,13 +18,13 @@ object Playground extends App {
     5
   }
 
-  //@LogMethodCalls
-  def methodWithTwoParamLists(x: Int)(y: String): Boolean = {
+  @LogMethodCalls
+  def methodWithTwoParamLists(x: Int, u: String)(y: String): Boolean = {
     x.toString == y
   }
 
   val x = someMethod(1, "abcd")
   methodWithNoParams()
-  methodWithTwoParamLists(5)("5")
+  methodWithTwoParamLists(5, "abcd")("5")
   println(x)
 }
