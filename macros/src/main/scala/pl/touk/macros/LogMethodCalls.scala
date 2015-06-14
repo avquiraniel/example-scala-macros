@@ -1,11 +1,12 @@
 package pl.touk.macros
 
-import scala.annotation.{implicitNotFound, StaticAnnotation}
+import scala.annotation.{compileTimeOnly, implicitNotFound, StaticAnnotation}
 
 
 import scala.language.experimental.macros
 import scala.reflect.macros.whitebox
 
+@compileTimeOnly("this is a macro annotation")
 class LogMethodCalls extends StaticAnnotation {
   def macroTransform(annottees: Any*): Any = macro LogMethodCallsMacro.impl
 }
