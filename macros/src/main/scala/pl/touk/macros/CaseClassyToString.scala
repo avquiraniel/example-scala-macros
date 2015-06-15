@@ -22,11 +22,13 @@ object CaseClassyToString {
             case method@DefDef(modifiers, termName, genericTypes, argLists, tr, tr2) if helpers.isConstructor(method) =>
               println(s"modifiers: $modifiers, termName: $termName, genericTypes: $genericTypes, argLists: $argLists, tr: $tr, tr2: $tr2")
               val firstArgList = argLists.headOption.getOrElse(Nil)
+              def concat(a: Tree, b: Tree): Tree = Apply(Select(a, TermName("concat")), b :: Nil)
               val toStringBody = {
-                val stringsToConcat = Literal(Constant(classDef.name.toString + "(")) +:
-                  firstArgList.map(d => Select(Ident(d.name), TermName("toString"))) :+
-                  Literal(Constant(")"))
-                Apply(Select(Apply(Ident(TermName("List")), stringsToConcat), TermName("mkString")), Literal(Constant(",")) :: Nil)
+                val start = Literal(Constant(classDef.name.toString + "("))
+                val end = Literal(Constant(")"))
+                val stringsToConcat = firstArgList.map(d => Select(Ident(d.name), TermName("toString")))
+                val printedArgs = Apply(Select(Apply(Ident(TermName("List")), stringsToConcat), TermName("mkString")), Literal(Constant(",")) :: Nil)
+                concat(start, concat(printedArgs, end))
               }
               val toStringMethod = DefDef(Modifiers(Flag.OVERRIDE), TermName("toString"), Nil, Nil, Ident(TypeName("String")), toStringBody)
               Seq(method, toStringMethod)
