@@ -32,5 +32,10 @@ object Playground extends App {
   class Test(x: String, y: Int, z: Int = 5) {
     def aaa(aaab: Int) = aaab.toString
   }
+
+  /*@CaseClassyToString
+  class Test2(x: String) {
+    override def toString: String = "blabla"
+  }*/
   println(new Test("abc", 5).toString)
 }
