@@ -40,11 +40,7 @@ case class MacroHelpers[Ctx <: blackbox.Context](c: Ctx) {
     }
   }
 
-  implicit class RichDefDef(defDef: DefDef) {
-    def isConstructor: Boolean = defDef.name.toString == "<init>"
+  implicit class RichDefDef(self: DefDef) {
+    def isConstructor: Boolean = self.name.toString == "<init>"
   }
-
- /* implicit class RichClassDef(classDef: ClassDef) {
-    def constru
-  }*/
 }
