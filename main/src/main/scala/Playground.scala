@@ -28,14 +28,24 @@ object Playground extends App {
   methodWithTwoParamLists(5, "abcd")("5")
   println(x)
 
-  @CaseClassyToString
+  /*@CaseClassyToString
   class Test(x: String, y: Int, z: Int = 5) {
     def aaa(aaab: Int) = aaab.toString
   }
+
+  object Case {
+    case class X(x: Int, y: String)
+  }
+  object FromAnnotation {
+    @CaseClassyToString
+    class X(x: Int, y: String)
+  }*/
+/*
+  println(new FromAnnotation.X(42, "foo").toString)
 
   /*@CaseClassyToString
   class Test2(x: String) {
     override def toString: String = "blabla"
   }*/
-  println(new Test("abc", 5).toString)
+  println(new Test("abc", 5).toString)*/
 }

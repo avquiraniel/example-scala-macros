@@ -18,8 +18,10 @@ lazy val commonSettings = Defaults.coreDefaultSettings ++ Seq(
   scalaVersion := "2.11.6",
   resolvers += Resolver.sonatypeRepo("snapshots"),
   resolvers += Resolver.sonatypeRepo("releases"),
-  libraryDependencies += "org.scalatest" %% "scalatest" % "2.2.2" % "test",
-  libraryDependencies += "com.github.julien-truffaut"  %%  "monocle-core" % monocleVersion,
+  libraryDependencies ++= Seq(
+    "org.scalatest" %% "scalatest" % "2.2.2" % "test",
+    "com.github.julien-truffaut"  %%  "monocle-core" % monocleVersion
+  ),
   addCompilerPlugin("org.scalamacros" % "paradise" % "2.0.1" cross CrossVersion.full),
   scalacOptions ++= Seq(
     "-deprecation",

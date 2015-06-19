@@ -12,21 +12,13 @@ class CaseClassyToString extends StaticAnnotation {
 private[macros] class CaseClassyToStringImpl(val c: whitebox.Context) {
   import c.universe._
   val helpers = MacroHelpers[c.type](c)
+  import helpers._
   def impl(annottees: c.Tree*): c.Tree = {
-
+    println("called CaseClassyToString")
     val enriched = annottees.head match {
       case classDef: ClassDef =>
-        val withNewToString = helpers.ClassDefLenses.defsLens.modify { defDefs =>
-          defDefs.flatMap {
-            case method if helpers.isConstructor(method) =>
-              val firstArgList = method.vparamss.headOption.getOrElse(Nil)
-              val toStringMethod: DefDef = generateToStringMethod(classDef.name, firstArgList)
-              Seq(method, toStringMethod)
-            case toStringMethod if toStringMethod.name.toString == "toString" =>
-              throw new IllegalArgumentException("toString already defined")
-            case other =>
-              Seq(other)
-          }
+        val withNewToString = ClassDefLenses.defsLens.modify { defDefs =>
+          enrichDefDefs(defDefs, classDef.name)
         }(classDef)
         withNewToString +: annottees.tail
       case _ =>
@@ -34,6 +26,18 @@ private[macros] class CaseClassyToStringImpl(val c: whitebox.Context) {
     }
 
     Block(enriched.toList, Literal(Constant(())))
+  }
+
+  private def enrichDefDefs(defDefs: List[DefDef], className: TypeName): List[DefDef] = {
+    if (defDefs.exists(_.name.toString == "toString")) {
+      defDefs
+    } else {
+      val primaryConstructor = defDefs.filter(_.isConstructor).head
+      val firstArgList = primaryConstructor.vparamss.headOption.getOrElse(Nil)
+      val toStringMethod: DefDef = generateToStringMethod(className, firstArgList)
+      println(toStringMethod)
+      defDefs :+ toStringMethod
+    }
   }
 
   def generateToStringMethod(className: TypeName, firstArgList: List[c.universe.ValDef]): DefDef = {
