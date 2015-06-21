@@ -38,9 +38,30 @@ case class MacroHelpers[Ctx <: blackbox.Context](c: Ctx) {
       }
       ClassDef(modifiers, name, typeDefs, Template(parents, self, newBody))
     }
+
+    val modifiersLens = Lens[ClassDef, Modifiers] { classDef =>
+      classDef.mods
+    } { newMods => classDef =>
+      val ClassDef(mods, name, tparams, impl) = classDef
+      ClassDef(newMods, name, tparams, impl)
+    }
+  }
+  object ModifiersLenses {
+    val flagsLens = Lens[Modifiers, FlagSet] { mods =>
+      mods.flags
+    } { newFlags => mods =>
+      val Modifiers(flags, privateWithin, annotations) = mods
+      Modifiers(newFlags, privateWithin, annotations)
+    }
   }
 
   implicit class RichDefDef(self: DefDef) {
     def isConstructor: Boolean = self.name.toString == "<init>"
+  }
+
+  implicit class RichClassDef(self: ClassDef) {
+    def primaryConstructorParameters: List[ValDef] = {
+      ClassDefLenses.defsLens.get(self).head.vparamss.head
+    }
   }
 }
