@@ -1,5 +1,7 @@
 package pl.touk.macros
 
+import pl.touk.macros.enrichment.Enrichments
+
 import scala.annotation.{compileTimeOnly, StaticAnnotation}
 import scala.language.experimental.macros
 import scala.reflect.macros.whitebox
@@ -11,7 +13,7 @@ class CaseClassyToString extends StaticAnnotation {
 
 private[macros] class CaseClassyToStringImpl(val c: whitebox.Context) {
   import c.universe._
-  val helpers = MacroHelpers[c.type](c)
+  val helpers = Enrichments[c.type](c)
   import helpers._
   def impl(annottees: c.Tree*): c.Tree = {
     println("called CaseClassyToString")

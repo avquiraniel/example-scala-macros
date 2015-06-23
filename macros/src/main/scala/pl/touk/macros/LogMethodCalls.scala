@@ -1,5 +1,7 @@
 package pl.touk.macros
 
+import pl.touk.macros.enrichment.Enrichments
+
 import scala.annotation.{compileTimeOnly, implicitNotFound, StaticAnnotation}
 
 
@@ -15,7 +17,7 @@ private[macros] object LogMethodCallsMacro {
   import Util._
 
   def impl(c: whitebox.Context)(annottees: c.Tree*): c.Tree = {
-    val helpers = MacroHelpers[c.type](c)
+    val helpers = Enrichments[c.type](c)
     import c.universe._
     val enriched = annottees map {
       case q"$mods def $methodName(...$argLists): $retType = $body " =>
