@@ -1,5 +1,6 @@
+package example.macros
+
 import org.scalatest.Matchers
-import pl.touk.macros.CaseClassyToString
 
 class ToStringTest extends org.scalatest.FlatSpec with Matchers {
   it should "override toString as case classes" in {

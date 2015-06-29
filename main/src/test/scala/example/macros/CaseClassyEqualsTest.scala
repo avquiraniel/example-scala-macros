@@ -1,5 +1,6 @@
+package example.macros
+
 import org.scalatest.Matchers
-import pl.touk.macros.CaseClassyEquals
 
 class CaseClassyEqualsTest extends org.scalatest.FlatSpec with Matchers {
   

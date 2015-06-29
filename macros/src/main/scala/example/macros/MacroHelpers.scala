@@ -1,4 +1,4 @@
-package pl.touk.macros
+package example.macros
 
 import monocle.Lens
 

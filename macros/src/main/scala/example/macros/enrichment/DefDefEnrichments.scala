@@ -1,4 +1,4 @@
-package pl.touk.macros.enrichment
+package example.macros.enrichment
 
 import monocle.Lens
 

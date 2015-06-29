@@ -1,5 +1,6 @@
+package example.macros
+
 import org.scalatest.{FlatSpec, Matchers}
-import pl.touk.macros.PositionInFile
 
 class PositionInFileTest extends FlatSpec with Matchers {
  it should "work" in {

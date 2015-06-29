@@ -1,6 +1,6 @@
-package pl.touk.macros
+package example.macros
 
-import pl.touk.macros.enrichment.Enrichments
+import example.macros.enrichment.Enrichments
 
 import scala.annotation.{compileTimeOnly, StaticAnnotation}
 import scala.language.experimental.macros

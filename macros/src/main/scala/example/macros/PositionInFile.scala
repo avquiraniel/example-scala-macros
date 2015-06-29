@@ -1,4 +1,5 @@
-package pl.touk.macros
+package example.macros
+
 import scala.language.experimental.macros
 
 object PositionInFile {

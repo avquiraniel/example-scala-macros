@@ -1,10 +1,10 @@
-package pl.touk.macros
+package example.macros
 
 import java.io.File
 
 import scala.language.experimental.macros
 import scala.reflect.macros.whitebox
-
+// TODO Resource-based paths?
 object DataFrom {
   def apply(locationOnDisk: String): Any = macro DataFromImpl.impl
 }

@@ -1,7 +1,7 @@
-package pl.touk.macros.enrichment
+package example.macros.enrichment
 
+import example.macros.Util
 import monocle.Lens
-import pl.touk.macros.Util
 
 import scala.reflect.macros.blackbox
 

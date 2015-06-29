@@ -1,6 +1,6 @@
-package pl.touk.macros.enrichment
+package example.macros.enrichment
 
-import pl.touk.macros.MacroHelpers
+import example.macros.MacroHelpers
 
 import scala.reflect.macros.blackbox
 

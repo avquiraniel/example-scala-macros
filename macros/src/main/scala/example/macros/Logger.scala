@@ -1,5 +1,4 @@
-package pl.touk.macros
-
+package example.macros
 
 @scala.annotation.implicitNotFound("LogMethodCalls annotation needs implicit Logger in scope")
 trait Logger {
