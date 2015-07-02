@@ -1,3 +1,3 @@
 logLevel := Level.Warn
 
-sbtVersion := "0.13.5"
+sbtVersion := "0.13.8"
