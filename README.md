@@ -1,1 +1,1 @@
-# Scala macros example
+# Scala macros examples
